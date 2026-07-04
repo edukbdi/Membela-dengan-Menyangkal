@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membela dengan Menyangkal | KBDI</title>
+  <link rel="icon" href="https://edukbdi.github.io/logo_KBDI/kbdi_trans.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════ TEMA: BARA & ABU ══════════ */
+    :root {
+      --bg: #0d0a07;
+      --bg2: #14100b;
+      --surface: #1a1410;
+      --surface2: #221a13;
+      --border: rgba(168,50,50,0.16);
+      --border-soft: rgba(200,180,160,0.10);
+      --ember: #c14a3a;
+      --ember-deep: #a83232;
+      --ember-glow: #e0673f;
+      --ash: #5c6472;
+      --ash2: #767e8e;
+      --text: #ece5db;
+      --text-muted: #a89f92;
+      --text-faint: #756c60;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-head: 'Playfair Display', serif;
+      --font-body: 'Source Serif 4', serif;
+      --font-ui: 'DM Sans', sans-serif;
+    }
+
+    html.light {
+      --bg: #f2ede6;
+      --bg2: #ebe4da;
+      --surface: #faf6f0;
+      --surface2: #f1e9df;
+      --border: rgba(143,43,43,0.18);
+      --border-soft: rgba(60,50,40,0.12);
+      --ember: #8f2b2b;
+      --ember-deep: #7a2424;
+      --ember-glow: #b8442f;
+      --ash: #565e6c;
+      --ash2: #6b7280;
+      --text: #14100a;
+      --text-muted: #3a332a;
+      --text-faint: #574e42;
+    }
+
+    /* Light mode: huruf isi lebih tebal & tegas (weight 300 terlalu tipis di latar krem) */
+    html.light .article-body p,
+    html.light .redaksi p,
+    html.light .stepper-panel p,
+    html.light .sikap-body p,
+    html.light .note-box p,
+    html.light .data-lbl,
+    html.light .sources li,
+    html.light .ktext,
+    html.light .zoom-caption { font-weight: 400; }
+    html.light .article-body p { color: #14100a; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ══════════ HERO ══════════ */
+    .hero {
+      position: relative;
+      min-height: 94vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: linear-gradient(165deg, #1c0f08 0%, #0d0a07 55%, #14060a 100%) !important;
+      /* Hero tetap gelap walau light mode */
+      --text: #ece5db;
+      --text-muted: #a89f92;
+      --text-faint: #8a7f70;
+    }
+
+    .hero-embers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+    .ember-dot {
+      position: absolute;
+      bottom: -12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--ember-glow) 0%, rgba(193,74,58,0.5) 45%, transparent 75%);
+      animation: rise var(--d,9s) linear infinite;
+      opacity: 0;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      12%  { opacity: var(--max,0.7); }
+      80%  { opacity: var(--max,0.7); }
+      100% { transform: translateY(-96vh) translateX(var(--drift,14px)); opacity: 0; }
+    }
+
+    /* Ilustrasi timbangan */
+    .hero-scale {
+      position: absolute;
+      right: -2%;
+      top: 50%;
+      transform: translateY(-52%);
+      width: min(540px, 60vw);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-scale svg { width: 100%; height: auto; filter: drop-shadow(0 0 46px rgba(193,74,58,0.16)); }
+
+    .denial-card { opacity: 0; animation: cardIn 0.75s ease forwards; }
+    .denial-card.d3 { animation-delay: 0.5s; }
+    .denial-card.d2 { animation-delay: 0.95s; }
+    .denial-card.d1 { animation-delay: 1.4s; }
+    @keyframes cardIn { from { opacity: 0; transform: translateX(92px); } to { opacity: 1; transform: translateX(0); } }
+    .denial-flame { animation: flick 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+    @keyframes flick { 0%, 100% { transform: scaleY(1) scaleX(1); } 50% { transform: scaleY(1.09) scaleX(0.95); } }
+
+    /* Overlay agar teks terbaca */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 2;
+      background: linear-gradient(90deg, rgba(13,10,7,0.92) 0%, rgba(13,10,7,0.55) 42%, rgba(13,10,7,0) 72%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      padding: 5rem 6% 4.6rem;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-ui);
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ember-glow);
+      margin-bottom: 1.3rem;
+      opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+    }
+    .hero-eyebrow::before { content: ''; width: 30px; height: 2px; background: var(--ember); border-radius: 2px; }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.4rem, 10vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: 0.015em;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title span { color: var(--ember-glow); }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(1.02rem, 2.4vw, 1.32rem);
+      font-weight: 300; font-style: italic;
+      color: var(--text-muted);
+      max-width: 540px; margin-bottom: 2.2rem;
+      opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+    }
+
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 0.7rem 1.4rem; align-items: center;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
+    .hero-meta-item { font-family: var(--font-ui); font-size: 0.78rem; color: var(--text-faint); display: flex; align-items: center; gap: 7px; }
+    .hero-tag {
+      display: inline-block; padding: 4px 13px;
+      border: 1px solid rgba(193,74,58,0.3); border-radius: 20px;
+      font-family: var(--font-ui); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.09em; color: var(--ember-glow); text-transform: uppercase;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ══════════ LAYOUT ══════════ */
+    .article-wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── CATATAN REDAKSI ── */
+    .redaksi {
+      margin: 3rem auto 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--ember);
+      border-radius: 0 10px 10px 0;
+      padding: 1.6rem 1.7rem;
+    }
+    .redaksi-label {
+      font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember);
+      display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem;
+    }
+    .redaksi p { font-family: var(--font-body); font-size: 0.98rem; line-height: 1.75; color: var(--text-muted); margin-bottom: 0.7rem; }
+    .redaksi p:last-child { margin-bottom: 0; }
+    .redaksi strong { color: var(--text); font-weight: 600; }
+
+    /* ── SECTION HEADINGS ── */
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 2.9rem);
+      letter-spacing: 0.03em; line-height: 1.02;
+      color: var(--text);
+      margin: 3.4rem 0 1.3rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--ember);
+      position: relative;
+    }
+    .section-heading::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 44px; height: 2px; background: var(--ash2); }
+
+    .eyebrow-num {
+      display: block; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── BODY ── */
+    .article-body p {
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 2vw, 1.12rem);
+      font-weight: 300; line-height: 1.9; color: var(--text);
+      margin-bottom: 1.4rem;
+    }
+    .article-body strong { font-weight: 600; color: var(--text); }
+    .article-body em { font-style: italic; }
+    .article-wrap > .article-body > p:first-of-type::first-letter {
+      font-family: var(--font-head); font-weight: 700;
+      float: left; font-size: 3.7rem; line-height: 0.82;
+      padding: 6px 12px 0 0; color: var(--ember);
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 4px solid var(--ember);
+      background: var(--surface2);
+      padding: 1.4rem 1.8rem; margin: 2.4rem 0;
+      border-radius: 0 8px 8px 0; position: relative;
+    }
+    .pull-quote p {
+      font-family: var(--font-head); font-style: italic;
+      font-size: clamp(1.1rem, 2.4vw, 1.3rem); line-height: 1.6;
+      color: var(--text); margin: 0;
+    }
+    .pull-quote::before {
+      content: '\201C'; font-family: var(--font-head);
+      font-size: 4.6rem; color: var(--ember); opacity: 0.2;
+      position: absolute; top: -6px; left: 10px; line-height: 1; pointer-events: none;
+    }
+
+    /* ── STEPPER TIGA TAHAP ── */
+    .stepper { margin: 2rem 0 2.6rem; }
+    .stepper-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .stepper-hint {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--font-ui); font-size: 0.84rem; font-weight: 600;
+      color: var(--ember); margin-bottom: 0.85rem;
+    }
+    .tap-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ember); position: relative; flex-shrink: 0; display: inline-block; }
+    .tap-dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--ember); animation: tapRipple 1.5s ease-out infinite; }
+    @keyframes tapRipple { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(2.6); opacity: 0; } }
+
+    .stepper-tab {
+      flex: 1; min-width: 160px;
+      display: flex; align-items: center; gap: 0.7rem;
+      font-family: var(--font-ui); font-size: 0.9rem; font-weight: 600;
+      text-align: left; cursor: pointer;
+      background: var(--surface); color: var(--text-muted);
+      border: 1px solid var(--border-soft); border-radius: 10px;
+      padding: 0.85rem 1rem; transition: all 0.25s; line-height: 1.25;
+    }
+    .stepper-tab .st-num { font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.03em; color: var(--ash2); line-height: 1; }
+    .stepper-tab .st-lbl { flex: 1; }
+    .stepper-tab .st-chev { flex-shrink: 0; color: var(--ember); font-size: 1.15rem; line-height: 1; transition: transform 0.25s; }
+    .stepper-tab:hover { border-color: var(--ember); transform: translateY(-1px); }
+    .stepper-tab.active { background: var(--surface2); border-color: var(--ember); color: var(--text); box-shadow: 0 3px 14px rgba(0,0,0,0.16); }
+    .stepper-tab.active .st-num { color: var(--ember); }
+    .stepper-tab.active .st-chev { transform: rotate(90deg); }
+    @keyframes tabPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(193,74,58,0); } 50% { box-shadow: 0 0 0 5px rgba(193,74,58,0.16); } }
+    .stepper-tab.hintpulse { animation: tabPulse 1.5s ease 3; }
+
+    .stepper-panel {
+      background: var(--surface); border: 1px solid var(--border-soft);
+      border-radius: 12px; padding: 1.6rem 1.7rem;
+      animation: panelIn 0.35s ease;
+    }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .stepper-panel h4 {
+      font-family: var(--font-head); font-size: 1.24rem; font-weight: 600;
+      color: var(--text); margin-bottom: 0.3rem;
+    }
+    .stepper-panel .st-quote {
+      font-family: var(--font-ui); font-style: italic; font-size: 0.95rem;
+      color: var(--ember); margin-bottom: 0.9rem; padding-left: 0.9rem;
+      border-left: 2px solid var(--ember);
+    }
+    .stepper-panel p { font-family: var(--font-body); font-size: 1rem; line-height: 1.75; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 300; }
+    .stepper-panel p:last-child { margin-bottom: 0; }
+    .stepper-panel .st-src { font-family: var(--font-ui); font-size: 0.75rem; color: var(--text-faint); }
+
+    /* ── ZOOM-OUT INTERAKTIF (dalam artikel) ── */
+    .zoom-box {
+      background: var(--surface); border: 1px solid var(--border-soft);
+      border-radius: 14px; padding: 1.6rem 1.4rem 1.4rem; margin: 2.2rem 0;
+    }
+    .zoom-stage {
+      position: relative; height: 270px; overflow: hidden; border-radius: 10px;
+      background: radial-gradient(circle at center, var(--surface2) 0%, var(--surface) 78%);
+      border: 1px solid var(--border-soft);
+    }
+    .zoom-scene { position: absolute; inset: 0; }
+
+    .case-dot {
+      position: absolute; left: 50%; top: 50%; width: 74px; height: 74px; margin: -37px 0 0 -37px;
+      border-radius: 50%; background: radial-gradient(circle, #ffd9a0 0%, #e0673f 46%, #a83232 100%);
+      display: flex; align-items: center; justify-content: center;
+      transform: scale(var(--cs, 1)); transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 0 var(--cg, 42px) rgba(224,103,63,0.6); z-index: 3;
+    }
+    .case-dot span { font-family: var(--font-ui); font-size: 0.6rem; font-weight: 700; color: #3a1508; text-align: center; line-height: 1.05; }
+
+    .ash-block {
+      position: absolute; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.03em; color: #eef0f4; background: var(--ash);
+      border-radius: 8px; padding: 0.6rem 0.7rem; text-align: center; line-height: 1.2;
+      opacity: 0; transform: scale(0.7); transition: opacity 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.28); z-index: 1;
+    }
+    .ab1 { left: 5%;  top: 11%;    width: 132px; }
+    .ab2 { right: 5%; top: 18%;    width: 118px; }
+    .ab3 { left: 8%;  bottom: 11%; width: 142px; }
+    .ab4 { right: 6%; bottom: 15%; width: 112px; }
+
+    .zoom-hint {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      font-family: var(--font-ui); font-size: 0.86rem; font-weight: 700;
+      color: var(--ember); margin: 1.3rem auto 0.3rem;
+      padding: 0.5rem 1.1rem; border: 1.5px solid var(--ember); border-radius: 30px;
+      background: rgba(193,74,58,0.10); letter-spacing: 0.01em;
+    }
+    .zoom-hint-wrap { text-align: center; }
+    .zoom-hint svg { flex-shrink: 0; }
+    .zoom-hint .arrows { display: inline-flex; animation: nudge 1.4s ease-in-out infinite; }
+    @keyframes nudge { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+
+    .zoom-range {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+      border-radius: 6px; background: linear-gradient(90deg, var(--ember) 0%, var(--ash) 100%);
+      margin: 0.7rem 0 0.5rem; cursor: pointer;
+    }
+    /* thumb dengan ikon panah kiri-kanan */
+    .zoom-range::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%;
+      background: var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='8 7 4 12 8 17'/%3E%3Cpolyline points='16 7 20 12 16 17'/%3E%3C/svg%3E") center/18px no-repeat;
+      border: 3px solid var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,0.35); cursor: grab;
+    }
+    .zoom-range::-webkit-slider-thumb:active { cursor: grabbing; }
+    .zoom-range::-moz-range-thumb {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='8 7 4 12 8 17'/%3E%3Cpolyline points='16 7 20 12 16 17'/%3E%3C/svg%3E") center/18px no-repeat;
+      border: 3px solid var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,0.35); cursor: grab;
+    }
+    /* isyarat goyang saat belum disentuh */
+    @keyframes thumbWiggle {
+      0%, 100% { box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 0 rgba(193,74,58,0.35); }
+      50% { box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 7px rgba(193,74,58,0); }
+    }
+    .zoom-range.wiggle::-webkit-slider-thumb { animation: thumbWiggle 1.3s ease 4; }
+    .zoom-range.wiggle::-moz-range-thumb { animation: thumbWiggle 1.3s ease 4; }
+
+    .zoom-labels { display: flex; justify-content: space-between; font-family: var(--font-ui); font-size: 0.74rem; color: var(--text-faint); }
+    .zoom-labels span:last-child { color: var(--ember); font-weight: 700; }
+    .zoom-caption {
+      font-family: var(--font-ui); font-size: 0.92rem; color: var(--text-muted);
+      line-height: 1.62; margin: 1rem auto 0; min-height: 3.2em; text-align: center; max-width: 470px;
+    }
+
+    /* ── DATA CARDS ── */
+    .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1rem; margin: 1.8rem 0 1rem; }
+    .data-card { background: var(--surface); border: 1px solid var(--border-soft); border-top: 3px solid var(--ember); border-radius: 10px; padding: 1.2rem 1.1rem; }
+    .data-num { font-family: var(--font-display); font-size: clamp(2.2rem,6vw,3rem); color: var(--ember); line-height: 0.95; }
+    .data-lbl { font-family: var(--font-ui); font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.3rem; }
+    .data-src { font-family: var(--font-ui); font-size: 0.7rem; color: var(--text-faint); margin-top: 0.5rem; }
+
+    /* ── NOTE BOX ── */
+    .note-box {
+      background: var(--surface2); border: 1px dashed var(--ash);
+      border-radius: 10px; padding: 1.2rem 1.4rem; margin: 1.8rem 0;
+    }
+    .note-box .nb-label { font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ash2); margin-bottom: 0.5rem; }
+    .note-box p { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); margin: 0; font-weight: 300; }
+
+    /* ── KOMENTAR ── */
+    .komentar-wrap { margin: 1.8rem 0; }
+    .komentar-intro { font-family: var(--font-ui); font-size: 0.9rem; color: var(--text-faint); font-style: italic; margin-bottom: 1.2rem; }
+    .kthread { background: var(--surface); border: 1px solid var(--border-soft); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .kitem { display: flex; gap: 0.7rem; }
+    .kav { flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .kav.sm { width: 1.6rem; height: 1.6rem; font-size: 0.82rem; }
+    .kbody { flex: 1; min-width: 0; }
+    .kmeta { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 2px; }
+    .kname { font-family: var(--font-ui); font-size: 0.82rem; font-weight: 700; color: var(--text); }
+    .ktime { font-family: var(--font-ui); font-size: 0.72rem; color: var(--text-faint); }
+    .ktext { font-family: var(--font-ui); font-size: 0.9rem; line-height: 1.55; color: var(--text-muted); margin: 2px 0 4px; }
+    .kreact { font-family: var(--font-ui); font-size: 0.74rem; color: var(--text-faint); display: flex; gap: 14px; }
+    .kreply-list { margin-top: 0.9rem; padding-left: 0.9rem; border-left: 2px solid var(--border-soft); display: flex; flex-direction: column; gap: 0.9rem; }
+    .kquiet .kname { color: var(--ash2); }
+    .kquiet { position: relative; }
+
+    /* ── LANGKAH SIKAP ── */
+    .sikap-item { display: flex; gap: 1rem; margin-bottom: 1.4rem; align-items: flex-start; }
+    .sikap-num { flex-shrink: 0; font-family: var(--font-display); font-size: 1.9rem; line-height: 1; color: var(--ember); width: 2.2rem; text-align: center; }
+    .sikap-body h4 { font-family: var(--font-head); font-size: 1.14rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .sikap-body p { font-family: var(--font-body); font-size: 1rem; line-height: 1.72; color: var(--text-muted); font-weight: 300; margin: 0; }
+
+    /* ── CLOSING ── */
+    .closing { margin: 3rem 0 1rem; padding: 2rem 1.6rem; background: var(--surface2); border-radius: 14px; text-align: center; }
+    .closing p { font-family: var(--font-head); font-style: italic; font-size: clamp(1.1rem,2.6vw,1.32rem); line-height: 1.65; color: var(--text); max-width: 560px; margin: 0 auto; }
+
+    /* ── SOURCES ── */
+    .sources { margin: 3rem 0 3.5rem; padding-top: 1.8rem; border-top: 1px solid var(--border); }
+    .sources h3 { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.04em; color: var(--text); margin-bottom: 1rem; }
+    .sources ol { padding-left: 1.3rem; }
+    .sources li { font-family: var(--font-ui); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.7rem; }
+    .sources li em { font-style: italic; }
+    .sources a { color: var(--ember); text-decoration: none; word-break: break-word; }
+    .sources a:hover { text-decoration: underline; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      body { font-size: 17px; }
+      .hero { min-height: 88vh; }
+      .hero-content { padding: 2.6rem 6% 3rem; }
+      .hero-scale { width: 82vw; right: -18%; opacity: 0.42; top: 46%; }
+      .hero::after { background: linear-gradient(180deg, rgba(13,10,7,0.5) 0%, rgba(13,10,7,0.7) 60%, rgba(13,10,7,0.95) 100%); }
+      .stepper-tab { min-width: 100%; }
+      .sikap-num { font-size: 1.6rem; width: 1.8rem; }
+    }
+    @media (max-width: 400px) {
+      .hero-scale { width: 90vw; right: -24%; opacity: 0.35; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; transition-duration: 0.001s !important; }
+      .ember-dot { display: none; }
+      .denial-card { opacity: 1 !important; transform: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-embers" id="emberContainer"></div>
+
+  <div class="hero-scale" aria-hidden="true">
+    <svg viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="emberG" cx="50%" cy="55%" r="55%">
+          <stop offset="0%" stop-color="#ffd9a0"/>
+          <stop offset="42%" stop-color="#e0673f"/>
+          <stop offset="100%" stop-color="#a83232"/>
+        </radialGradient>
+        <radialGradient id="glowG" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#e0673f" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#e0673f" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- FAKTA: nyala api di belakang -->
+      <circle cx="300" cy="228" r="128" fill="url(#glowG)"/>
+      <g class="denial-flame">
+        <path d="M300 148 C 324 186, 332 208, 323 234 C 319 248, 302 254, 300 272 C 296 252, 281 246, 279 227 C 278 208, 289 197, 300 148 Z" fill="url(#emberG)"/>
+        <path d="M300 198 C 311 214, 313 228, 306 242 C 302 249, 296 244, 295 236 C 294 224, 298 212, 300 198 Z" fill="#ffe6bf" opacity="0.9"/>
+      </g>
+      <text x="300" y="306" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="15" font-weight="700" letter-spacing="4" fill="#ffcaa0">FAKTA</text>
+
+      <!-- TIGA LAPIS PENYANGKALAN menutupi fakta -->
+      <g transform="translate(342,252) rotate(-10)">
+        <g class="denial-card d3">
+          <rect x="-98" y="-47" width="196" height="94" rx="11" fill="#171410" fill-opacity="0.92" stroke="#5c6472" stroke-width="1.5"/>
+          <text x="-82" y="-19" font-family="'Bebas Neue',sans-serif" font-size="21" fill="#767e8e">03</text>
+          <text x="2" y="6" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="13" font-weight="600" letter-spacing="1" fill="#cfc8bc">YANG LAIN</text>
+          <text x="2" y="27" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="13" font-weight="600" letter-spacing="1" fill="#cfc8bc">LEBIH PARAH</text>
+        </g>
+      </g>
+      <g transform="translate(300,226) rotate(2)">
+        <g class="denial-card d2">
+          <rect x="-98" y="-47" width="196" height="94" rx="11" fill="#1a1410" fill-opacity="0.93" stroke="#8a7358" stroke-width="1.5"/>
+          <text x="-82" y="-19" font-family="'Bebas Neue',sans-serif" font-size="21" fill="#a88a66">02</text>
+          <text x="2" y="15" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="14" font-weight="600" letter-spacing="1" fill="#ddd5c9">KONSPIRASI</text>
+        </g>
+      </g>
+      <g transform="translate(260,202) rotate(12)">
+        <g class="denial-card d1">
+          <rect x="-98" y="-47" width="196" height="94" rx="11" fill="#1f1712" fill-opacity="0.96" stroke="#c14a3a" stroke-width="1.8"/>
+          <text x="-82" y="-19" font-family="'Bebas Neue',sans-serif" font-size="21" fill="#e0673f">01</text>
+          <text x="2" y="6" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="13" font-weight="600" letter-spacing="1" fill="#ece5db">BUKAN ISLAM</text>
+          <text x="2" y="27" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="13" font-weight="600" letter-spacing="1" fill="#ece5db">SEJATI</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Sosial &middot; Psikologi Kolektif</span>
+    <h1 class="hero-title">Membela<br>dengan <span>Menyangkal</span></h1>
+    <p class="hero-subtitle">Pola berulang umat ketika terjadi kekerasan atas nama agama &mdash; dan mengapa cara membela yang keliru justru melemahkan yang ingin dibela.</p>
+    <div class="hero-meta">
+      <span class="hero-tag">Redaksi KBDI</span>
+      <span class="hero-meta-item">Bacaan mendalam</span>
+      <span class="hero-meta-item">Berbasis sumber terverifikasi</span>
+    </div>
+  </div>
+</section>
+
+<main>
+<div class="article-wrap">
+
+  <!-- CATATAN REDAKSI -->
+  <div class="redaksi reveal">
+    <div class="redaksi-label">&#9873; Catatan Redaksi &mdash; Dibaca Lebih Dulu</div>
+    <p>Artikel ini ditulis <strong>justru karena Redaksi menghormati umat Islam</strong>, bukan sebaliknya. Tujuannya bukan menyerang agama, melainkan mengajak umat memperbaiki dirinya dari dalam &mdash; sesuatu yang hanya mungkin dimulai dengan kejujuran.</p>
+    <p>Terorisme dalam bentuk apa pun dikutuk sepenuhnya. Islamofobia &mdash; prasangka dan diskriminasi terhadap Muslim &mdash; juga nyata dan sama-sama tidak dibenarkan. Justru karena keduanya nyata, keduanya harus dibedakan: mengkritik penyangkalan yang tidak produktif bukanlah Islamofobia, dan membela diri dari stigma bukanlah pembenaran atas kekerasan.</p>
+    <p>Mekanisme yang dibahas di sini <strong>bukan milik satu agama</strong>. Setiap kelompok identitas melakukannya saat merasa terancam. Konteks Indonesia relevan semata karena di sinilah pola itu paling sering terlihat.</p>
+  </div>
+
+  <div class="article-body">
+
+    <p>Setiap kali terjadi kasus terorisme yang pelakunya mengaku Muslim, linimasa media sosial Indonesia bergerak mengikuti koreografi yang nyaris bisa ditebak. Mula-mula muncul dugaan konspirasi &mdash; &ldquo;ini pasti settingan untuk memframing Islam.&rdquo; Ketika bukti terlalu kuat untuk disangkal, narasi bergeser: &ldquo;itu bukan Islam yang sebenarnya, cuma oknum.&rdquo; Ketika argumen itu goyah, senjata terakhir dikeluarkan: perbandingan skala &mdash; &ldquo;korbannya cuma segini, bandingkan dengan Amerika yang menewaskan ratusan ribu warga sipil di Irak dan Afghanistan.&rdquo;</p>
+
+    <p>Tiga tahap ini bukan kebetulan. Masing-masing punya nama dalam literatur akademik, sudah dipetakan psikolog dan sosiolog jauh sebelum era media sosial. Dan yang lebih penting untuk dipahami sejak awal: pola ini bukan penyakit khas satu agama. Ia muncul di setiap kelompok identitas yang merasa terancam oleh tindakan anggotanya sendiri.</p>
+
+    <!-- BAGIAN 1 -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">01 &mdash; Konteks</span>Bukan Salah Satu Agama Saja</h2>
+
+    <p class="reveal">Sebelum melangkah lebih jauh, ini harus digarisbawahi tebal: penyangkalan kolektif bukan penyakit unik umat Islam. Riset akademik paling mutakhir soal <em>moral disengagement</em> kolektif justru banyak diaplikasikan pada peristiwa 7 Oktober 2023, menganalisis bagaimana kekejaman dibenarkan dan dilegitimasi lewat propaganda yang digaungkan bukan hanya oleh kelompok pelaku, tetapi juga berbagai aktor di seluruh dunia.</p>
+
+    <p class="reveal">Kerangka psikologis yang sama bahkan dipakai untuk menganalisis penyangkalan perubahan iklim &mdash; di mana orang menerima fakta tapi menyangkal implikasi moralnya. Supremasi kulit putih memakainya untuk terorisme domestik di Barat; kekerasan komunal di berbagai negara memakai pola serupa. Jadi artikel ini bukan tentang &ldquo;ada yang salah dengan Islam.&rdquo; Ini tentang mekanisme pertahanan psikologis yang dipakai kelompok mana pun ketika identitasnya terancam &mdash; yang di Indonesia, sebagai negara mayoritas Muslim dengan sejarah terorisme berlabel agama yang nyata, paling sering terlihat pada respons terhadap kasus semacam ini.</p>
+
+    <!-- BAGIAN 2: STEPPER -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">02 &mdash; Anatomi</span>Tiga Tahap Penyangkalan</h2>
+
+    <p class="reveal">Perhatikan urutannya. Ketiga tahap ini biasanya muncul berturut-turut dalam satu percakapan &mdash; mundur selangkah demi selangkah, tapi tetap enggan mengakui inti masalahnya. Klik tiap tahap untuk melihat apa yang sebenarnya terjadi.</p>
+
+    <div class="stepper reveal">
+      <div class="stepper-hint">
+        <span class="tap-dot"></span>
+        Ketuk tiap tahap untuk membaca penjelasannya
+      </div>
+      <div class="stepper-tabs">
+        <button class="stepper-tab active hintpulse" data-step="0"><span class="st-num">01</span><span class="st-lbl">&ldquo;Itu bukan Islam sejati&rdquo;</span><span class="st-chev">&rsaquo;</span></button>
+        <button class="stepper-tab" data-step="1"><span class="st-num">02</span><span class="st-lbl">&ldquo;Ini konspirasi&rdquo;</span><span class="st-chev">&rsaquo;</span></button>
+        <button class="stepper-tab" data-step="2"><span class="st-num">03</span><span class="st-lbl">&ldquo;Yang lain lebih parah&rdquo;</span><span class="st-chev">&rsaquo;</span></button>
+      </div>
+
+      <div class="stepper-panel" id="stepPanel">
+        <!-- diisi via JS -->
+      </div>
+    </div>
+
+    <!-- BAGIAN 3: SCALE INTERAKTIF -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">03 &mdash; Inti</span>&ldquo;Yang Lain Lebih Parah&rdquo; Itu Menghindar, Bukan Membela</h2>
+
+    <p class="reveal">Tahap ketiga adalah yang paling sering dipakai, dan paling penting dibedah. Membandingkan korban terorisme dengan korban invasi Amerika di Irak secara faktual bisa saja benar &mdash; jumlahnya memang berbeda jauh. Tapi kebenaran faktual itu tidak membatalkan tanggung jawab moral atas kasus yang sedang dibicarakan. Inilah yang secara logika disebut <em>tu quoque</em>: mengalihkan, bukan menjawab.</p>
+
+    <p class="reveal">Psikolog Stanford <strong>Albert Bandura</strong> menyebut mekanisme ini <em>advantageous comparison</em> &mdash; bagaimana suatu perilaku dinilai sangat dipengaruhi oleh apa yang dijadikan pembanding. Dengan mengeksploitasi prinsip kontras, tindakan tercela bisa dibuat tampak benar. Semakin mencolok kekejaman yang dijadikan pembanding, semakin sebuah tindakan destruktif tampak &ldquo;kecil.&rdquo;</p>
+
+    <div class="zoom-box reveal" id="zoomBox">
+      <div class="zoom-stage">
+        <div class="zoom-scene" id="zoomScene">
+          <div class="ash-block ab1">PERANG DUNIA</div>
+          <div class="ash-block ab2">INVASI IRAK</div>
+          <div class="ash-block ab3">KOLONIALISME</div>
+          <div class="ash-block ab4">KONFLIK LAIN</div>
+          <div class="case-dot"><span>kasus<br>ini</span></div>
+        </div>
+      </div>
+      <div class="zoom-hint-wrap">
+        <div class="zoom-hint">
+          <span class="arrows">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 7 4 12 8 17"/><polyline points="16 7 20 12 16 17"/></svg>
+          </span>
+          Geser untuk melihat
+        </div>
+      </div>
+      <input type="range" min="0" max="100" value="0" step="1" class="zoom-range wiggle" id="zoomRange" aria-label="Geser: seberapa jauh kasus ini dibandingkan dengan kasus lain" />
+      <div class="zoom-labels"><span>Dilihat dari dekat</span><span>&ldquo;Yang lain lebih parah&rdquo; &rarr;</span></div>
+      <p class="zoom-caption" id="zoomCaption">Dilihat dari dekat, kasus ini punya bobot moralnya sendiri &mdash; nyata, dan menuntut pengakuan. <em>Geser ke kanan.</em></p>
+    </div>
+
+    <p class="reveal">Perhatikan ironinya: ini mekanisme yang <strong>sama persis</strong> dipakai oleh teroris untuk membenarkan kekerasan dan oleh sebagian pembela di media sosial untuk meminimalkannya. Keduanya bertumpu pada logika perbandingan skala. Bandura sendiri mencontohkan bahwa pelaku terorisme memandang tindakan mereka sebagai pengorbanan tanpa pamrih dengan membandingkannya pada kekejaman luas terhadap kelompok yang mereka bela.</p>
+
+    <p class="reveal">Sosiolog <strong>Stanley Cohen</strong> menamai tahap ini dari sisi lain: <em>implicatory denial</em> &mdash; kondisi di mana fakta tidak disangkal, interpretasinya juga diakui, tapi yang diminimalkan adalah implikasi psikologis, politis, atau moral yang lazimnya mengikuti. Yang dipersengketakan bukan faktanya, melainkan bobot moralnya dan keharusan untuk merespons.</p>
+
+    <div class="pull-quote reveal">
+      <p>Tidak ada yang secara sadar mendukung kekerasan di sini. Tapi ketika bobot moral sebuah kejahatan terus dikecilkan lewat perbandingan, kejahatan itu perlahan terasa wajar &mdash; dan kewajaran itulah yang menguntungkan pelaku berikutnya, bukan niat siapa pun.</p>
+    </div>
+
+    <!-- BAGIAN 4: DATA -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">04 &mdash; Data</span>Iklim yang Melatari</h2>
+
+    <p class="reveal">Fenomena ini tidak berdiri di ruang hampa. Survei nasional PPIM UIN Syarif Hidayatullah Jakarta (2017, berjudul <em>&ldquo;Api dalam Sekam&rdquo;</em>) memetakan sikap keberagamaan siswa dan mahasiswa Muslim di Indonesia.</p>
+
+    <div class="data-grid reveal">
+      <div class="data-card">
+        <div class="data-num">51,1%</div>
+        <div class="data-lbl">responden intoleran terhadap aliran Islam minoritas (Ahmadiyah, Syiah)</div>
+        <div class="data-src">PPIM UIN Jakarta</div>
+      </div>
+      <div class="data-card">
+        <div class="data-num">58,5%</div>
+        <div class="data-lbl">memiliki pandangan keagamaan yang cenderung radikal</div>
+        <div class="data-src">PPIM UIN Jakarta</div>
+      </div>
+      <div class="data-card">
+        <div class="data-num">260</div>
+        <div class="data-lbl">peristiwa pelanggaran kebebasan beragama sepanjang 2024</div>
+        <div class="data-src">SETARA Institute</div>
+      </div>
+    </div>
+
+    <p class="reveal">Direktur Eksekutif PPIM saat itu menyebut kondisi ini &ldquo;api dalam sekam&rdquo; &mdash; belum menyala, tapi menyimpan potensi. SETARA Institute mencatat 260 peristiwa dan 402 tindakan pelanggaran kebebasan beragama sepanjang 2024; angka 2025 tercatat 221 peristiwa dengan 239 korban, sedikit menurun secara kuantitatif.</p>
+
+    <div class="note-box reveal">
+      <div class="nb-label">Catatan Kejujuran Metodologis</div>
+      <p>Data di atas mengukur intoleransi dan pelanggaran kebebasan beragama <em>secara umum</em>, bukan spesifik fenomena penyangkalan pasca-terorisme. Ia menggambarkan iklim yang melatari, bukan bukti langsung berapa banyak orang yang melakukan <em>whataboutism</em>. Kami menyertakannya sebagai konteks &mdash; bukan klaim kuantitatif berlebihan &mdash; justru untuk menghindari kesalahan yang artikel ini kritik.</p>
+    </div>
+
+    <!-- BAGIAN 5: IRONI -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">05 &mdash; Ironi</span>Yang Merugikan Umat Sendiri</h2>
+
+    <p class="reveal">Inilah inti argumennya, dan ia didukung riset yang cukup mengejutkan. Studi Combating Terrorism Center di West Point tentang radikalisasi pasca 7 Oktober 2023 menemukan bahwa organisasi teror jihadi secara konsisten membingkai propaganda mereka lewat narasi keluhan dan viktimisasi (<em>victimhood&ndash;revenge</em>) untuk membenarkan pembalasan dan kekerasan &mdash; narasi yang menyebar cepat di media sosial dan menyulut gelombang radikalisasi remaja. Berbagai model radikalisasi menempatkan persepsi ketidakadilan dan keluhan kelompok sebagai &ldquo;pembukaan kognitif&rdquo; &mdash; pintu masuk pertama menuju kekerasan.</p>
+
+    <p class="reveal">Di sinilah letak ironinya. Ketika komunitas merespons terorisme dengan logika &ldquo;lihat, yang mereka lakukan pada kita jauh lebih kejam,&rdquo; mereka tanpa sadar memakai <strong>kerangka retoris yang sama persis</strong> dengan yang dipakai perekrut untuk meradikalisasi generasi berikutnya. Narasi keluhan historis yang dimaksudkan untuk membela justru menghidupkan bahan bakar yang sama.</p>
+
+    <div class="pull-quote reveal">
+      <p>Selama masih ada penyangkalan, tidak bisa ada pengakuan. Tanpa pengakuan, tidak ada perbaikan &mdash; dan generasi berikutnya tetap rentan pada narasi yang sama.</p>
+    </div>
+
+    <!-- BAGIAN 6: KOMENTAR -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">06 &mdash; Cermin</span>Begini Suaranya di Internet</h2>
+
+    <div class="komentar-wrap reveal">
+      <p class="komentar-intro">Tidak perlu mengarang. Cukup buka kolom komentar berita mana saja setiap kali kasus semacam ini terjadi.</p>
+
+      <!-- Thread 1 -->
+      <div class="kthread">
+        <div class="kitem">
+          <div class="kav">&#128100;</div>
+          <div class="kbody">
+            <div class="kmeta"><span class="kname">Ahmad_Fajar</span><span class="ktime">3 hari lalu</span></div>
+            <p class="ktext">innalillahi... tp yg kaya gini bukan representasi umat islam ya bang. itu oknum doang, agamanya aja yg dibawa2</p>
+            <div class="kreact"><span>&#128077; 8,4rb</span><span>&#128172; 512 balasan</span></div>
+            <div class="kreply-list">
+              <div class="kitem"><div class="kav sm">&#129395;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Rizky.Maulana</span><span class="ktime">3 hari lalu</span></div>
+                <p class="ktext">setuju bgt. islam mah agama damai, yg kaya gitu udh keluar dari ajaran yg bener</p>
+                <div class="kreact"><span>&#128077; 3,1rb</span></div>
+              </div></div>
+              <div class="kitem kquiet"><div class="kav sm">&#129300;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">kartika_ok</span><span class="ktime">2 hari lalu</span></div>
+                <p class="ktext">tp bang dia sendiri yg bilang "demi allah" pas rekam video terakhirnya loh. gmn ceritanya itu oknum tp motifnya agama</p>
+                <div class="kreact"><span>&#128077; 892</span></div>
+              </div></div>
+              <div class="kitem"><div class="kav sm">&#128560;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Ahmad_Fajar</span><span class="ktime">2 hari lalu</span></div>
+                <p class="ktext">@kartika_ok itu udh dicuci otak sm kelompok radikal, bukan islam yg ngajarin. jgn samain agama sm orgnya</p>
+                <div class="kreact"><span>&#128077; 1,7rb</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thread 2 -->
+      <div class="kthread">
+        <div class="kitem">
+          <div class="kav">&#128527;</div>
+          <div class="kbody">
+            <div class="kmeta"><span class="kname">Mas_Broto99</span><span class="ktime">2 hari lalu</span></div>
+            <p class="ktext">orang ribut soal ini doang. amerika bunuh ratusan ribu warga sipil di irak &amp; afghanistan aja ga ada yg minta maaf. ini korban brp org emangnya dibanding itu</p>
+            <div class="kreact"><span>&#128077; 11rb</span><span>&#128172; 634 balasan</span></div>
+            <div class="kreply-list">
+              <div class="kitem"><div class="kav sm">&#128293;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Nia.Permatasari</span><span class="ktime">2 hari lalu</span></div>
+                <p class="ktext">BENER. drama bgt sih, giliran negara barat yg perang diem aja tuh semua</p>
+                <div class="kreact"><span>&#128077; 4,5rb</span></div>
+              </div></div>
+              <div class="kitem kquiet"><div class="kav sm">&#128533;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">user8827x</span><span class="ktime">1 hari lalu</span></div>
+                <p class="ktext">loh ini kasusnya di sini, korbannya juga tetangga kita sendiri. kok jadi larinya ke perang irak</p>
+                <div class="kreact"><span>&#128077; 203</span></div>
+              </div></div>
+              <div class="kitem"><div class="kav sm">&#128580;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Mas_Broto99</span><span class="ktime">1 hari lalu</span></div>
+                <p class="ktext">@user8827x lu belum ngerti konteks global bro, baca sejarah dulu baru komen</p>
+                <div class="kreact"><span>&#128077; 1,2rb</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thread 3 -->
+      <div class="kthread">
+        <div class="kitem">
+          <div class="kav">&#129488;</div>
+          <div class="kbody">
+            <div class="kmeta"><span class="kname">Yusuf.Ibrahim22</span><span class="ktime">1 hari lalu</span></div>
+            <p class="ktext">gw yakin ini settingan buat framing islam. timingnya pas bgt sm isu yg lagi rame, kebetulan bgt gak sih?</p>
+            <div class="kreact"><span>&#128077; 6,7rb</span><span>&#128172; 401 balasan</span></div>
+            <div class="kreply-list">
+              <div class="kitem"><div class="kav sm">&#128064;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Bagas_Wijaya</span><span class="ktime">1 hari lalu</span></div>
+                <p class="ktext">ada benernya jg sih, media emg demen banget nyari2 kesalahan islam</p>
+                <div class="kreact"><span>&#128077; 2,3rb</span></div>
+              </div></div>
+              <div class="kitem kquiet"><div class="kav sm">&#128529;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">fitriani.dwi</span><span class="ktime">22 jam lalu</span></div>
+                <p class="ktext">pelakunya udah ngaku sendiri kok bang di rekaman, bukan konspirasi media. ini bukan kasus pertama juga</p>
+                <div class="kreact"><span>&#128077; 445</span></div>
+              </div></div>
+              <div class="kitem"><div class="kav sm">&#128548;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Yusuf.Ibrahim22</span><span class="ktime">20 jam lalu</span></div>
+                <p class="ktext">@fitriani.dwi rekaman jg bisa direkayasa skrg, jaman deepfake bro. jgn polos amat</p>
+                <div class="kreact"><span>&#128077; 987</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thread 4 -->
+      <div class="kthread">
+        <div class="kitem">
+          <div class="kav">&#128591;</div>
+          <div class="kbody">
+            <div class="kmeta"><span class="kname">Pak_Slamet_RT05</span><span class="ktime">20 jam lalu</span></div>
+            <p class="ktext">saya guru ngaji di kampung. jujur ini yg bikin susah kita yg ngajar agama dgn bener. kalo terus2an dibilang "bukan islam" tanpa mau evaluasi, generasi abis ini gampang kena rekrut lagi</p>
+            <div class="kreact"><span>&#128077; 312</span><span>&#128172; 89 balasan</span></div>
+            <div class="kreply-list">
+              <div class="kitem"><div class="kav sm">&#128556;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">anon_pejuang_subuh</span><span class="ktime">19 jam lalu</span></div>
+                <p class="ktext">@Pak_Slamet_RT05 pak ini kok kaya bela2in yg nyalahin islam sih astagfirullah</p>
+                <div class="kreact"><span>&#128077; 1,4rb</span></div>
+              </div></div>
+              <div class="kitem kquiet"><div class="kav sm">&#128100;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">Pak_Slamet_RT05</span><span class="ktime">18 jam lalu</span></div>
+                <p class="ktext">@anon_pejuang_subuh saya bukan nyalahin, saya minta kita introspeksi. dua hal beda pak</p>
+                <div class="kreact"><span>&#128077; 67</span></div>
+              </div></div>
+              <div class="kitem"><div class="kav sm">&#128530;</div><div class="kbody">
+                <div class="kmeta"><span class="kname">rendra.aja</span><span class="ktime">17 jam lalu</span></div>
+                <p class="ktext">pak slamet ini kayanya kurang iman deh, komennya defense terus bukan malah bela</p>
+                <div class="kreact"><span>&#128077; 890</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="komentar-intro" style="margin-top:1.2rem;">Perhatikan polanya: satu suara yang mengajak jujur &mdash; termasuk seorang guru ngaji &mdash; hampir selalu kalah suara dari yang reaktif. Itulah bagaimana penyangkalan menjadi normal.</p>
+    </div>
+
+    <!-- BAGIAN 7: SIKAP -->
+    <h2 class="section-heading reveal"><span class="eyebrow-num">07 &mdash; Jalan Keluar</span>Lalu, Bagaimana Kita Menyikapinya?</h2>
+
+    <p class="reveal">Mengkritik pola penyangkalan tanpa menawarkan jalan keluar hanya akan melahirkan penyangkalan baru. Maka pertanyaan yang lebih penting: apa yang bisa kita lakukan?</p>
+
+    <div class="reveal">
+      <div class="sikap-item">
+        <div class="sikap-num">1</div>
+        <div class="sikap-body">
+          <h4>Pisahkan membela agama dari membela pelaku.</h4>
+          <p>Islam tidak butuh dibela dengan cara menyangkal fakta. Agama tidak menjadi lebih buruk karena ada penganutnya yang berbuat jahat &mdash; sama seperti profesi guru tidak menjadi buruk karena satu oknum bersalah. Mengakui &ldquo;pelaku ini bertindak atas nama agama, dan itu salah&rdquo; bukan mengkhianati agama; itu justru menegaskan bahwa agama tidak membenarkan tindakannya.</p>
+        </div>
+      </div>
+      <div class="sikap-item">
+        <div class="sikap-num">2</div>
+        <div class="sikap-body">
+          <h4>Akui dulu, baru jelaskan konteks.</h4>
+          <p>Perbedaan antara pembelaan yang sehat dan penyangkalan terletak pada urutannya. Penyangkalan memakai konteks untuk menutup diskusi. Pembelaan sehat berkata: &ldquo;Ini salah dan kami tidak membenarkannya. Adapun soal akar masalahnya, mari kita bicarakan.&rdquo; Pengakuan lebih dulu, konteks kemudian &mdash; bukan konteks sebagai tameng untuk menghindari pengakuan.</p>
+        </div>
+      </div>
+      <div class="sikap-item">
+        <div class="sikap-num">3</div>
+        <div class="sikap-body">
+          <h4>Waspadai narasi keluhan yang didaur ulang.</h4>
+          <p>Riset radikalisasi menunjukkan bahwa narasi &ldquo;lihat apa yang mereka lakukan pada kita&rdquo; adalah pintu masuk pertama perekrutan. Artinya, setiap kali kita membela diri dengan mendaur ulang keluhan historis, kita memakai bahan bakar yang sama yang dipakai perekrut. Sadari ini, dan putuskan rantainya.</p>
+        </div>
+      </div>
+      <div class="sikap-item">
+        <div class="sikap-num">4</div>
+        <div class="sikap-body">
+          <h4>Beri ruang bagi suara internal yang mau introspeksi.</h4>
+          <p>Sering kali yang paling keras dibungkam bukan pihak luar, melainkan Muslim sendiri yang berani berkata &ldquo;ada yang perlu kita perbaiki.&rdquo; Mereka dituduh &ldquo;kurang iman&rdquo; atau &ldquo;membela musuh&rdquo; &mdash; padahal merekalah yang melakukan pembelaan paling tulus. Melindungi ruang bagi kritik internal adalah bentuk menjaga agama, bukan melemahkannya.</p>
+        </div>
+      </div>
+      <div class="sikap-item">
+        <div class="sikap-num">5</div>
+        <div class="sikap-body">
+          <h4>Tolak <em>whataboutism</em> &mdash; dari dua arah.</h4>
+          <p>Sama seperti kita menolak &ldquo;yang lain lebih parah&rdquo; saat membela kelompok sendiri, kita juga harus menolaknya saat menilai kelompok lain. Konsistensi inilah yang membedakan prinsip dari pembelaan buta. Standar moral yang hanya berlaku untuk orang lain bukanlah standar moral &mdash; itu cuma senjata.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="closing reveal">
+      <p>Menutup mata memang lebih nyaman. Tapi api dalam sekam tidak padam karena tidak dilihat &mdash; ia padam karena ada yang berani memadamkannya.</p>
+    </div>
+
+  </div><!-- /article-body -->
+
+  <!-- SUMBER -->
+  <div class="sources reveal">
+    <h3>Sumber &amp; Referensi</h3>
+    <ol>
+      <li>Bandura, A. <em>Moral Disengagement.</em> Wiley Online Library. <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/9780470672532.wbepp165" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
+      <li>Bandura, A. (2004). <em>The role of selective moral disengagement in terrorism and counterterrorism.</em> American Psychological Association Press.</li>
+      <li>Cohen, S. (2001). <em>States of Denial: Knowing about Atrocities and Suffering.</em> Polity Press &mdash; via Critical Criminology. <a href="https://link.springer.com/article/10.1007/s10612-016-9344-5" target="_blank" rel="noopener">link.springer.com</a></li>
+      <li>Flew, A. <em>The No-True-Scotsman Fallacy.</em> The Fallacy Files. <a href="https://www.fallacyfiles.org/scotsman.html" target="_blank" rel="noopener">fallacyfiles.org</a> &middot; <a href="https://en.wikipedia.org/wiki/No_true_Scotsman" target="_blank" rel="noopener">Wikipedia</a></li>
+      <li>PPIM UIN Syarif Hidayatullah Jakarta (2017/2018). <em>Api dalam Sekam: Keberagamaan Gen-Z.</em> &mdash; via Tirto. <a href="https://tirto.id/survei-uin-jakarta-intoleransi-tumbuh-di-banyak-sekolah-dan-kampus-czQL" target="_blank" rel="noopener">tirto.id</a></li>
+      <li>SETARA Institute. <em>Kondisi Kebebasan Beragama/Berkeyakinan 2024 &amp; 2025.</em> &mdash; via ANTARA. <a href="https://www.antaranews.com/berita/5467235/setara-institute-ada-221-pelanggaran-kebebasan-beragama-pada-2025" target="_blank" rel="noopener">antaranews.com</a></li>
+      <li>Combating Terrorism Center, West Point (2025). <em>From TikTok to Terrorism: The Online Radicalization of European Lone Attackers since October 7, 2023.</em> <a href="https://ctc.westpoint.edu/from-tiktok-to-terrorism-the-online-radicalization-of-european-lone-attackers-since-october-7-2023/" target="_blank" rel="noopener">ctc.westpoint.edu</a></li>
+      <li><em>Moral Disengagement from Hamas&rsquo; Atrocities.</em> Studies in Conflict &amp; Terrorism (2025). <a href="https://www.tandfonline.com/doi/full/10.1080/1057610X.2025.2494749" target="_blank" rel="noopener">tandfonline.com</a></li>
+      <li><em>Politico-ideological violence: Zooming in on grievances</em> (Moghaddam; Wiktorowicz). PMC. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8905122/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov</a></li>
+    </ol>
+  </div>
+
+</div><!-- /article-wrap -->
+</main>
+
+<!-- ══════════ SCRIPT ARTIKEL ══════════ -->
+<script>
+  /* Bara melayang di hero */
+  (function () {
+    const c = document.getElementById('emberContainer');
+    if (!c) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    for (let i = 0; i < 34; i++) {
+      const e = document.createElement('div');
+      e.className = 'ember-dot';
+      const size = Math.random() * 5 + 2;
+      e.style.cssText =
+        'width:' + size + 'px;height:' + size + 'px;' +
+        'left:' + (Math.random() * 100) + '%;' +
+        '--d:' + (Math.random() * 7 + 7).toFixed(1) + 's;' +
+        '--max:' + (Math.random() * 0.5 + 0.25).toFixed(2) + ';' +
+        '--drift:' + (Math.random() * 60 - 30).toFixed(0) + 'px;' +
+        'animation-delay:-' + (Math.random() * 12).toFixed(1) + 's;';
+      c.appendChild(e);
+    }
+  })();
+
+  /* Stepper tiga tahap */
+  (function () {
+    const steps = [
+      {
+        title: 'No True Scotsman \u2014 "Itu Bukan Islam Sejati"',
+        quote: '"Yang begitu bukan representasi Islam, cuma oknum yang bawa-bawa agama."',
+        body: [
+          'Filsuf <strong>Antony Flew</strong> memberi nama pola ini jauh sebelum internet. <em>No True Scotsman</em> adalah fallacy informal di mana seseorang memodifikasi klaim sebelumnya sebagai respons terhadap contoh tandingan, dengan menyatakan contoh itu dikecualikan berdasarkan definisi &mdash; alih-alih mengakui kesalahan atau memberi bukti untuk membantahnya.',
+          'Flew sendiri mencatat sesuatu yang penting untuk keadilan analisis: fallacy ini sering dipakai untuk melindungi kelompok dari tuduhan bersalah karena asosiasi. Motivasinya defensif, bukan jahat. Tapi kata kunci "sejati", "asli", "murni" yang menempel pada sebuah identitas adalah tanda peringatan &mdash; klaim "agama X selalu damai" tidak pernah diuji dengan bukti; begitu ada bukti berlawanan, yang digeser adalah definisi "penganut sejati", bukan klaimnya.'
+        ],
+        src: 'Sumber: Antony Flew, The Fallacy Files; Wikipedia'
+      },
+      {
+        title: 'Literal Denial \u2014 "Ini Konspirasi"',
+        quote: '"Pasti settingan untuk memframing Islam. Timingnya kebetulan banget."',
+        body: [
+          'Dalam kerangka sosiolog <strong>Stanley Cohen</strong>, tahap "ini pasti rekayasa" adalah bentuk <em>literal denial</em> &mdash; penegasan bahwa sesuatu tidak terjadi atau tidak benar; fakta atau pengetahuan tentang fakta itu disangkal.',
+          '<span style="color:var(--ash2);font-weight:600;">Catatan: ini observasi, bukan temuan penelitian.</span> Yang menarik diamati, kecurigaan konspirasi ini biasanya asimetris &mdash; kasus kekerasan dari kelompok lain cenderung langsung dipercaya, sementara kasus dari kelompok sendiri langsung dicurigai rekayasa. Ini konsisten dengan apa yang disebut <em>motivated skepticism</em>: menerapkan standar pembuktian lebih ketat pada informasi yang tidak kita sukai.'
+        ],
+        src: 'Sumber: Stanley Cohen, States of Denial (2001)'
+      },
+      {
+        title: 'Implicatory Denial \u2014 "Yang Lain Lebih Parah"',
+        quote: '"Korbannya cuma segini, bandingkan dengan invasi Amerika di Irak."',
+        body: [
+          'Psikolog Stanford <strong>Albert Bandura</strong> menyebut ini <em>advantageous comparison</em> &mdash; dengan mengeksploitasi prinsip kontras, tindakan tercela dibuat tampak benar. Semakin mencolok kekejaman pembandingnya, semakin destruktif tindakan itu tampak "kecil".',
+          '<strong>Stanley Cohen</strong> menyebutnya <em>implicatory denial</em>: fakta tidak disangkal, interpretasinya diakui, tapi yang diminimalkan adalah implikasi moralnya. Yang dipersengketakan bukan faktanya, melainkan keharusan untuk merespons. Inilah tahap paling halus &mdash; dan paling berbahaya &mdash; karena membuat kejahatan terasa wajar tanpa ada yang secara terbuka membenarkannya.'
+        ],
+        src: 'Sumber: Albert Bandura (Wiley); Stanley Cohen (2001)'
+      }
+    ];
+
+    const panel = document.getElementById('stepPanel');
+    const tabs = document.querySelectorAll('.stepper-tab');
+    function render(i) {
+      const s = steps[i];
+      let html = '<h4>' + s.title + '</h4>';
+      html += '<div class="st-quote">' + s.quote + '</div>';
+      s.body.forEach(function (p) { html += '<p>' + p + '</p>'; });
+      html += '<div class="st-src">' + s.src + '</div>';
+      panel.innerHTML = html;
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (x) { x.classList.remove('active'); x.classList.remove('hintpulse'); });
+        t.classList.add('active');
+        render(parseInt(t.dataset.step, 10));
+      });
+    });
+    render(0);
+  })();
+
+  /* Zoom-out interaktif di badan artikel */
+  (function () {
+    const r = document.getElementById('zoomRange');
+    const cap = document.getElementById('zoomCaption');
+    if (!r) return;
+    const dot = document.querySelector('#zoomBox .case-dot');
+    const blocks = document.querySelectorAll('#zoomBox .ash-block');
+    const caps = [
+      'Dilihat dari dekat, kasus ini punya bobot moralnya sendiri \u2014 nyata, dan menuntut pengakuan.',
+      'Mulai dibandingkan: <em>"tapi yang lain jauh lebih besar\u2026"</em>',
+      'Semakin jauh dibandingkan, kasus ini terlihat makin kecil di antara tumpukan pembanding.',
+      'Akhirnya ia menyusut jadi <em>"tidak seberapa"</em> \u2014 padahal faktanya tidak berubah, hanya cara kita memandangnya. Itulah anestesi moral kolektif.'
+    ];
+    function apply() {
+      const z = r.value / 100;
+      if (dot) {
+        dot.style.setProperty('--cs', (1 - 0.86 * z).toFixed(3));
+        dot.style.setProperty('--cg', (42 - 36 * z).toFixed(0) + 'px');
+      }
+      blocks.forEach(function (b) {
+        b.style.opacity = z.toFixed(2);
+        b.style.transform = 'scale(' + (0.7 + 0.3 * z).toFixed(3) + ')';
+      });
+      const ci = z < 0.05 ? 0 : (z < 0.4 ? 1 : (z < 0.8 ? 2 : 3));
+      cap.innerHTML = caps[ci];
+    }
+    r.addEventListener('input', function () {
+      r.classList.remove('wiggle');
+      apply();
+    });
+    apply();
+  })();
+
+  /* Scroll reveal */
+  (function () {
+    const io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+<!-- ══════════ HEADER / FOOTER KBDI ══════════ -->
+<script>
+  const savedTheme = localStorage.getItem('kbdi-theme');
+  if (savedTheme === 'light') document.documentElement.classList.add('light');
+
+  fetch('https://edukbdi.github.io/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.body.insertAdjacentHTML('afterbegin', html);
+      const header = document.getElementById('kbdi-header');
+      if (savedTheme === 'light') header.classList.add('kbdi-light');
+      document.getElementById('kbdiThemeToggle').addEventListener('click', function() {
+        const isLight = document.documentElement.classList.toggle('light');
+        header.classList.toggle('kbdi-light', isLight);
+        localStorage.setItem('kbdi-theme', isLight ? 'light' : 'dark');
+        const footer = document.getElementById('kbdi-footer');
+        if (footer) footer.classList.toggle('kbdi-light', isLight);
+      });
+    });
+
+  fetch('https://edukbdi.github.io/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.body.insertAdjacentHTML('beforeend', html);
+      const footer = document.getElementById('kbdi-footer');
+      if (footer && savedTheme === 'light') footer.classList.add('kbdi-light');
+    });
+</script>
+
+</body>
+</html>
